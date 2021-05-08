@@ -5,11 +5,18 @@
 
 // Write a macro that passes the quiz! No hints this time, you can do it!
 
-// I AM NOT DONE
+macro_rules! my_macro {
+    ($val:expr) => {
+        // Cant concatenate two &str without allocation.
+        // to_owned() allocates on heap.
+        // format!("Hello {}",$val)
+        "Hello ".to_owned()+$val
+    }
+}
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // use super::*;
 
     #[test]
     fn test_my_macro_world() {

@@ -33,12 +33,19 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        let parts = s.splitn(2, ',').collect::<Vec<&str>>();
+        match &parts[..] {
+            [name, age] if !name.is_empty() => age
+                .parse()
+                .map(|age| Person {name: name.to_string(), age,})
+                .unwrap_or_default(),
+            _ => Person::default(),
+        }
     }
 }
+
 
 fn main() {
     // Use the `from` function
@@ -126,6 +133,16 @@ mod tests {
     #[test]
     fn test_trailing_comma_and_some_string() {
         let p: Person = Person::from("Mike,32,man");
+        assert_eq!(p.name, "John");
+        assert_eq!(p.age, 30);
+    }
+
+    #[test]
+    fn simons_test() {
+        let p = "x10"
+            .parse::<usize>()
+            .map(|x| Person {name: "Simon".to_string(), age: x,})
+            .unwrap_or_default();
         assert_eq!(p.name, "John");
         assert_eq!(p.age, 30);
     }
